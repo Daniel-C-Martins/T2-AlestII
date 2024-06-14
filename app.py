@@ -26,9 +26,9 @@ def compare_boxes():
         for j in range(len(list_boxes)):
             if i == j:
                 continue
-            elif (list_boxes[i].get_large_side() > list_boxes[j].get_large_side() and
-                list_boxes[i].get_medium_side() > list_boxes[j].get_medium_side() and
-                list_boxes[i].get_small_side() > list_boxes[j].get_small_side()):
+            elif (list_boxes[i].get_large_side() < list_boxes[j].get_large_side() and
+                list_boxes[i].get_medium_side() < list_boxes[j].get_medium_side() and
+                list_boxes[i].get_small_side() < list_boxes[j].get_small_side()):
                 list_boxes[i].add_contem(list_boxes[j].get_name())
 
 def write_txt():
@@ -36,7 +36,7 @@ def write_txt():
     with open("Resultados\\grafo.txt", "w") as archive:
         for box in list_boxes:
             for contem_id in box.contem:
-                line = f"{contem_id} {box.get_name()}\n"
+                line = f"{box.get_name()} {contem_id} \n"
                 archive.write(line)
 
 def main():
@@ -47,7 +47,7 @@ def main():
     write_txt()
     
     d = Digraph("Resultados\\grafo.txt")
-    print(d.toDot())
+    print(d.toDot() > "Resultados\\resultado.txt")
 
     # for caixa in list_boxes:
     #     print(caixa)
