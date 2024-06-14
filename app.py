@@ -5,7 +5,6 @@ from digraph import Digraph
 
 list_boxes = [] #Listas de caixas
 
-
 def read_boxes():
     global list_boxes
     #Leitura dos dados
@@ -20,8 +19,6 @@ def read_boxes():
             box = Box(name, greater, medium, smallest)
             list_boxes.append(box)
         
-    
-
 def compare_boxes():
     global list_boxes
 
@@ -34,7 +31,6 @@ def compare_boxes():
                 list_boxes[i].get_small_side() > list_boxes[j].get_small_side()):
                 list_boxes[i].add_contem(list_boxes[j].get_name())
 
-
 def write_txt():
     global list_boxes
     with open("Resultados\\grafo.txt", "w") as archive:
@@ -42,9 +38,6 @@ def write_txt():
             for contem_id in box.contem:
                 line = f"{contem_id} {box.get_name()}\n"
                 archive.write(line)
-
-               
-
 
 def main():
     global list_boxes
