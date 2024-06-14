@@ -8,7 +8,7 @@ list_boxes = [] #Listas de caixas
 def read_boxes():
     global list_boxes
     #Leitura dos dados
-    with open("Casos\\exemplo.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
+    with open("Casos\\teste50.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
         for lines in archive:         #"For" responsável por ler cada linha
             measure = lines.strip().split()
             name = re.sub('[^a-zA-Z0-9]', '', lines)
@@ -39,6 +39,12 @@ def write_txt():
                 line = f"{box.get_name()} {contem_id} \n"
                 archive.write(line)
 
+def dot(d):
+    global list_boxes
+    with open("Resultados\\grafo.dot", "w") as archive:
+        archive.write(d.toDot())
+
+
 def main():
     global list_boxes
 
@@ -47,11 +53,9 @@ def main():
     write_txt()
     
     d = Digraph("Resultados\\grafo.txt")
-    print(d.toDot() > "Resultados\\resultado.txt")
+    dot(d)
 
-    # for caixa in list_boxes:
-    #     print(caixa)
-    
+
 
 if __name__ == "__main__":
     main() 

@@ -44,20 +44,20 @@ class Graph:
                 self.addEdge(verts[0], verts[1])
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    g = Graph()
+#     g = Graph()
 
-    g.addEdge("0", "1")
-    g.addEdge("0", "2")
-    g.addEdge("2", "1")
+#     g.addEdge("0", "1")
+#     g.addEdge("0", "2")
+#     g.addEdge("2", "1")
 
-    g = Graph("tinyG.txt")
+#     g = Graph("tinyG.txt")
 
-    for v in g.getVerts():
-        print(f"{v}: ", end="")
-        for w in g.getAdj(v):
-            print(f"{w} ", end="")
-        print()
-    print()
-    print(g.toDot())
+#     for v in g.getVerts():
+#         print(f"{v}: ", end="")
+#         for w in g.getAdj(v):
+#             print(f"{w} ", end="")
+#         print()
+#     print()
+#     print(g.toDot())

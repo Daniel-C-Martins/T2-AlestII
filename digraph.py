@@ -1,6 +1,5 @@
 from graph import Graph
 
-
 class Digraph(Graph):
 
     def addEdge(self, v, w):
@@ -13,8 +12,9 @@ class Digraph(Graph):
         sb += "node [shape = circle];" + NEWLINE
         for v in sorted(self.getVerts()):
             for w in self.getAdj(v):
-                sb += v + " -> " + w + NEWLINE
+                sb += v  + " -> " + w + NEWLINE
         sb += "}" + NEWLINE
+        print(self.getVerts())
         return sb
 
 
