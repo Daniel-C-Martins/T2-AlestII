@@ -17,7 +17,7 @@ class Digraph(Graph):
         print(self.getVerts())
         return sb
 
-
+'''
 if __name__ == "__main__":
 
     g = Digraph()
@@ -34,4 +34,4 @@ if __name__ == "__main__":
             print(f"{w} ", end="")
         print()
     print()
-    print(g.toDot())
+    print(g.toDot())'''

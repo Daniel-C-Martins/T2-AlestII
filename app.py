@@ -8,7 +8,7 @@ list_boxes = [] #Listas de caixas
 def read_boxes():
     global list_boxes
     #Leitura dos dados
-    with open("Casos\\teste50.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
+    with open("Casos\\teste20.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
         for lines in archive:         #"For" responsável por ler cada linha
             measure = lines.strip().split()
             name = re.sub('[^a-zA-Z0-9]', '', lines)
