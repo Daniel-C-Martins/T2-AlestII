@@ -47,7 +47,7 @@ def read_graph_from_file(file_path):
     return edges
 
 # Caminho do arquivo que contém as arestas
-file_path = 'Resultados\grafo.txt'
+file_path = 'Resultados\\grafo.txt'
 
 # Lendo as arestas do arquivo
 edges = read_graph_from_file(file_path)

@@ -6,6 +6,7 @@ class Box:
         self._medium_side = medium_side
         self._small_side = small_side
         self.contem = []   #Lista de caixas que cabem dentro dessa caixa
+        self.esta_contida = [] #Lista de caixas que esta caixa cabe dentro 
       
 
     def __str__(self):
@@ -29,7 +30,17 @@ class Box:
         contem_str = ', '.join(str(item) for item in self.contem)
         return contem_str
     
+    def get_contida(self):
+        contem_str = ', '.join(str(item) for item in self.esta_contida)
+        return contem_str
+    
     def add_contem(self, num):
         self.contem.append(num)
+
+    def add_contida(self, num):
+        self.esta_contida.append(num)
+
+    def contem_IsEmpty(self):
+        return not self.contem
 
 

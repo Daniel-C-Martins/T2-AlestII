@@ -14,7 +14,7 @@ class Digraph(Graph):
             for w in self.getAdj(v):
                 sb += v  + " -> " + w + NEWLINE
         sb += "}" + NEWLINE
-        print(self.getVerts())
+        # print(self.getVerts())
         return sb
 
 '''
