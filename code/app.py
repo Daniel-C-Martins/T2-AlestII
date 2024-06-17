@@ -6,6 +6,7 @@ from depthfirstsearch import DepthFirstSearch
 from topological import Topological
 
 list_boxes = [] #Listas de caixas
+paths = []
 
 def read_boxes():
     global list_boxes
@@ -49,20 +50,40 @@ def dot(d):
 
 #NÂO MEXER PRA CIMA ===================================================================================================
 
-def caminho_maximo(d, box):
-    print(f"A partir de {box.get_name()} chegamos em: ")
-    dfs = DepthFirstSearch(d, box.get_name())
-    
-    for v in d.getVerts():
-        print(f"{v}: ", end="")
-        if dfs.hasPathTo(v):
-            for w in dfs.pathTo(v):
-                print(f"{w} ", end="")
-        print()
-    print()
+# Função para calcular o caminho máximo para cada box na lista list_boxes
+def caminho_maximo_para_boxes(d, list_boxes):
+    global paths
+    for box in list_boxes:
+        #print(box)
+        if (box.contem_IsEmpty()):
+            dfs = DepthFirstSearch(d, box.get_name())
+            #print(box.get_name())
+            for v in list_boxes:
+                caminho = 0   
+                if dfs.hasPathTo(v.get_name()):
+                    #print("Sim")
+                    if caminho < (len(dfs.pathTo(v.get_name()))):
+                        caminho = len(dfs.pathTo(v.get_name())) + 1
+                        paths.append(caminho)
+                    else:
+                         caminho = len(dfs.pathTo(v.get_name())) + 1
+                         paths.append(caminho)
+                else:
+                    paths.append(caminho)
+                #print(caminho)
+               
+ 
+
+    # for v in d.getVerts():
+    #     print(f"{v}: ", end="")
+    #     if dfs.hasPathTo(v):
+    #         for w in dfs.pathTo(v):
+    #             print(f"{w} ", end="")
+    #     print()
+    # print()
 
 def main():
-    global list_boxes
+    global list_boxes, paths
 
     read_boxes()
     compare_boxes()
@@ -70,11 +91,17 @@ def main():
     d = Digraph("Resultados\\grafo.txt")
     dot(d)
 
-    for box in list_boxes:
-        if (box.contem_IsEmpty()):
-            caminho_maximo(d, box)
-            
+    caminho_maximo_para_boxes(d, list_boxes)
 
+    paths.sort(reverse=True)
+    print(paths[0])
+
+    # dfs = DepthFirstSearch(d, "680579148")
+    # print(d.getAdj("680579148"))
+    # print(dfs.pathTo("988955720"))
+        
+    
+    
 
     #NÂO MEXER PRA CIMA ===================================================================================================    
 

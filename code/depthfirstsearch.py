@@ -25,16 +25,7 @@ class DepthFirstSearch:
                 self.edgeTo[w] = s
                 self.__dfs(g, w)
 
-# if __name__ == "__main__":
 
-#     g = Graph("tinyG.txt")
 
-#     dfs = DepthFirstSearch(g, "0")
-
-#     for v in g.getVerts():
-#         print(f"{v}: ", end="")
-#         if dfs.hasPathTo(v):
-#             for w in dfs.pathTo(v):
-#                 print(f"{w} ", end="")
-#         print()
-#     print()
+    
+ 
