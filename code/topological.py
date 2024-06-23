@@ -1,6 +1,5 @@
 from digraph import Digraph
 
-
 class Topological:
     def __init__(self, g):
         self.marked = {}

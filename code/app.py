@@ -1,24 +1,22 @@
 #Classe principal do programa
-import re
 from box import Box
+from longestPath import LongestPathDAG
 from digraph import Digraph
-from depthfirstsearch import DepthFirstSearch
-from topological import Topological
+from time import process_time
 
 list_boxes = [] #Listas de caixas
+longest_paths = {}
 paths = []
 
-def read_boxes():
+def read_boxes(chosen):
     global list_boxes
     #Leitura dos dados
-    with open("Casos\\teste10.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
+    with open(f"Casos\\{chosen}.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
         for lines in archive:         #Itera sobre as linhas do txt
-            measure = lines.strip().split()     #Pega a linha e guarda em uma lista como strings
-            name = re.sub('[^a-zA-Z0-9]', '', lines)    #Guarda o nome da caixa como as dimensoes
-            map(int, measure)                           #Troca o valor das dimensoes para int
+            measure = list(map(int, lines.strip().split()))  #Troca o valor das dimensoes para int
             measure.sort()                              #Ordena para comparação
-            smallest, medium, greater = map(int, measure)   #Adiciona os valores em ordem
-            
+            smallest, medium, greater = measure  #Adiciona os valores em ordem
+            name = str(greater) + str(medium) + str(smallest) 
             box = Box(name, greater, medium, smallest)      #Cria a caixa com o nome e seus tamanhos
             list_boxes.append(box)      #Coloca a caixa na lista
         
@@ -48,70 +46,151 @@ def dot(d):
     with open("Resultados\\grafo.dot", "w") as archive:
         archive.write(d.toDot())        #Escrevendo o .dot para geração de imagens
 
-#NÂO MEXER PRA CIMA ===================================================================================================
-
-# Função para calcular o caminho máximo para cada box na lista list_boxes
-def caminho_maximo_para_boxes(d, list_boxes):
-    global paths
+def longest_path(d):
+    global list_boxes, longest_paths
+    # Inicialize uma vez para todos os vértices
+    
     for box in list_boxes:
-        #print(box)
-        if (box.contem_IsEmpty()):
-            dfs = DepthFirstSearch(d, box.get_name())
-            #print(box.get_name())
-            for v in list_boxes:
-                caminho = 0   
-                if dfs.hasPathTo(v.get_name()):
-                    #print("Sim")
-                    if caminho < (len(dfs.pathTo(v.get_name()))):
-                        caminho = len(dfs.pathTo(v.get_name())) + 1
-                        paths.append(caminho)
-                    else:
-                         caminho = len(dfs.pathTo(v.get_name())) + 1
-                         paths.append(caminho)
-                else:
-                    paths.append(caminho)
-                #print(caminho)
-               
- 
+        if box.contem_IsEmpty():
+            lp = LongestPathDAG(d, box.get_name())
+            lp.find_longest_path()
+            longest_paths[box.get_name()] = lp
 
-    # for v in d.getVerts():
-    #     print(f"{v}: ", end="")
-    #     if dfs.hasPathTo(v):
-    #         for w in dfs.pathTo(v):
-    #             print(f"{w} ", end="")
-    #     print()
-    # print()
+def calc_longest_path():
+    global list_boxes, longest_paths, paths
+    
+    # Agora calcule os caminhos para todos os pares
+    for source_box in list_boxes:
+        for target_box in list_boxes:
+            if source_box.get_name() in longest_paths:
+                path = longest_paths[source_box.get_name()].path_to(target_box.get_name())
+                if path is not None:  # Adiciona apenas se o caminho for válido (não vazio)
+                    path_length = len(path)
+                    paths.append((source_box.get_name(), target_box.get_name(), path, path_length))
+
+def print_longest_path():
+    global paths
+    # Encontre o maior comprimento
+    max_length = 0
+    max_path_info = None
+    for source, target, path, length in paths:
+        if length > max_length:
+            max_length = length
+            max_path_info = (source, target, path)
+
+    # Imprima o maior comprimento encontrado
+    if max_path_info is not None:
+        source, target, path = max_path_info
+        print(f"O maior comprimento de todos os caminhos é: {max_length}")
+        print(f"O caminho mais longo correspondente é de {source} para {target}: {path}")
+    else:
+        print("Não há caminhos válidos no grafo.")
+
+def menu():
+    option = input("""
+    ===============================          
+            Bem-vindo(a)
+        ao menu de escolhas
+    ===============================
+    Digite o numero correspondente
+      ao teste que deseja fazer       
+    1 - 10 Vertices
+    2 - 20 Vertices
+    3 - 50 Vertices
+    4 - 100 Vertices
+    5 - 200 Vertices
+    6 - 300 Vertices
+    7 - 500 Vertices
+    8 - 1000 Vertices
+    9 - 2000 Vertices
+    ===============================
+    Opções de entradas maiores
+    Não recomendado para todos
+    10 - 5000 Vertices
+    11 - 10000 Vertices
+    ===============================  
+    """)
+
+    switch = {
+        1: "teste10",
+        2: "teste20",
+        3: "teste50",
+        4: "teste100",
+        5: "teste200",
+        6: "teste300",
+        7: "teste500",
+        8: "teste1000",
+        9: "teste2000",
+        10: "teste5000",
+        11: "teste10000"
+    }  
+    if option.isdigit():
+        return switch.get(int(option))
+    else:
+        menu()
+            
 
 def main():
-    global list_boxes, paths
+    global list_boxes
 
-    read_boxes()
+    option = menu()
+    start_time = process_time()
+    read_boxes(option)
     compare_boxes()
     write_txt()
     d = Digraph("Resultados\\grafo.txt")
     dot(d)
-
-    caminho_maximo_para_boxes(d, list_boxes)
-
-    paths.sort(reverse=True)
-    print(paths[0])
-
-    # dfs = DepthFirstSearch(d, "680579148")
-    # print(d.getAdj("680579148"))
-    # print(dfs.pathTo("988955720"))
-        
-    
-    
-
-    #NÂO MEXER PRA CIMA ===================================================================================================    
+    longest_path(d)
+    calc_longest_path()
+    print_longest_path()
+    final_time = process_time()
+    print(f"O tempo para rodar o {option} foi: {final_time - start_time}")
 
 
-    #Entendendo o problema
-    #Pegar cada caixa e percorrer até o final usando a busca em profundidade, guardar o maior caminho
-    #Pensando no seguinte, se tiver uma caixa1 que cabe dentro da caixa2, então o caminho maximo nunca vira da caixa2
-    #E sim da caixa1, tendo uma lista em cada caixa, das caixas que cabem dentro dela
-    #Podemos testar se algum caixa cabe dentro dela, se sim, não faz sentido testar se a partir dela existe um caminho maximo
-    #Isso corta muitos vertices dag, então tentariamos a partir das caixas que não possuem uma ligação previa nelas 
+
+
+
+
+    # # Inicialize uma vez para todos os vértices
+    # longest_paths = {}
+    # for box in list_boxes:
+    #     if box.contem_IsEmpty():
+    #         source_name = box.get_name()
+    #         lp = LongestPathDAG(d, source_name)
+    #         lp.find_longest_path()
+    #         longest_paths[source_name] = lp
+
+    # paths = []
+
+    # # Agora calcule os caminhos para todos os pares
+    # for source_box in list_boxes:
+    #     for target_box in list_boxes:
+    #         source_name = source_box.get_name()
+    #         target_name = target_box.get_name()
+    #         if source_name in longest_paths:
+    #             path = longest_paths[source_name].path_to(target_name)
+    #             if path is not None:  # Adiciona apenas se o caminho for válido (não vazio)
+    #                 path_length = len(path)
+    #                 paths.append((source_name, target_name, path, path_length))
+
+    # # paths agora contém todos os caminhos de todos os vértices para todos os outros vértices
+    # # e os comprimentos dos caminhos
+
+    # # Encontre o maior comprimento
+    # max_length = 0
+    # max_path_info = None
+    # for source, target, path, length in paths:
+    #     if length > max_length:
+    #         max_length = length
+    #         max_path_info = (source, target, path)
+
+    # # Imprima o maior comprimento encontrado
+    # if max_path_info is not None:
+    #     source, target, path = max_path_info
+    #     print(f"O maior comprimento de todos os caminhos é: {max_length}")
+    #     print(f"O caminho mais longo correspondente é de {source} para {target}: {path}")
+    # else:
+    #     print("Não há caminhos válidos no grafo.")
 
 if __name__ == "__main__":
     main() 
