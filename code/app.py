@@ -11,11 +11,11 @@ count = 0
 
 # Função responsável por ler as caixas do txt
 def read_boxes(chosen):
-    global list_boxes
+    global list_boxes, count
     #Leitura dos dados
     with open(f"Casos\\{chosen}.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
         for lines in archive:
-            count += 1         #Itera sobre as linhas do txt
+            count += 1        #Itera sobre as linhas do txt
             measure = list(map(int, lines.strip().split()))  #Converte os 3 valores da linha para uma lista de int
             measure.sort()                              #Ordena a lista para comparação
             smallest, medium, bigger = measure  #Adiciona os valores em ordem, esses valores serão usados paa criar a caixa
@@ -25,7 +25,7 @@ def read_boxes(chosen):
 
 #Função responsável por comparar os tamanhos das caixas      
 def compare_boxes():
-    global list_boxes 
+    global list_boxes, count
     for i in range(len(list_boxes)):  
         count += 1          #Comparando as caixas da lista
         for j in range(len(list_boxes)):   # Fixa uma caixa e compara com as outras
@@ -40,7 +40,7 @@ def compare_boxes():
 
 #Função usada para escrever um texto com as ligações
 def write_txt():
-    global list_boxes
+    global list_boxes, count
     with open("Resultados\\grafo.txt", "w") as archive:     #Abrindo o arquivo de saida
         for box in list_boxes:          #Iterando sobre toda a lista
             count += 1    
@@ -51,12 +51,12 @@ def write_txt():
 
 #Função usada para gera o .dot 
 def dot(d):
-    global list_boxes
+    global list_boxes, count
     with open("Resultados\\grafo.dot", "w") as archive:
         archive.write(d.toDot())        #Escrevendo o .dot para geração de imagens
 
 def longest_path(d):
-    global list_boxes, longest_paths
+    global list_boxes, longest_paths, count
     # Inicialize uma vez para todos os vértices
     
     for box in list_boxes:
@@ -67,7 +67,7 @@ def longest_path(d):
             longest_paths[box.get_name()] = lp  #Adiciona no dicionario o caminho
 
 def calc_longest_path():
-    global list_boxes, longest_paths, paths
+    global list_boxes, longest_paths, paths, count
     
     # Agora calcule os caminhos para todos os pares
     for source_box in list_boxes:
@@ -82,7 +82,7 @@ def calc_longest_path():
 
 #Função usada para descobrir e printar o maior caminho
 def print_longest_path():
-    global paths
+    global paths, count
    
     max_length = 0          #Variavel usada para guardar o comprimento do maior caminho
     max_path_info = None    #Variavel usada para guardar as infos sobre o maior caminho
@@ -144,7 +144,7 @@ def menu():
             
 #Função principal da aplicação
 def main():
-    global list_boxes
+    global list_boxes, count
 
     option = menu()
     start_time = process_time()
