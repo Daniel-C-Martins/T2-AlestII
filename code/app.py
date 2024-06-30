@@ -7,13 +7,15 @@ from time import process_time
 list_boxes = [] #Listas de caixas
 longest_paths = {} #Dicionario dos maiores caminhos de cada vertice("Folha") até outro vertice
 paths = [] 
+count = 0
 
 # Função responsável por ler as caixas do txt
 def read_boxes(chosen):
     global list_boxes
     #Leitura dos dados
     with open(f"Casos\\{chosen}.txt", "r") as archive: #Leitura das linhas do arquivo txt para uma variável 
-        for lines in archive:         #Itera sobre as linhas do txt
+        for lines in archive:
+            count += 1         #Itera sobre as linhas do txt
             measure = list(map(int, lines.strip().split()))  #Converte os 3 valores da linha para uma lista de int
             measure.sort()                              #Ordena a lista para comparação
             smallest, medium, bigger = measure  #Adiciona os valores em ordem, esses valores serão usados paa criar a caixa
@@ -23,10 +25,11 @@ def read_boxes(chosen):
 
 #Função responsável por comparar os tamanhos das caixas      
 def compare_boxes():
-    global list_boxes
-
-    for i in range(len(list_boxes)):        #Comparando as caixas da lista
-        for j in range(len(list_boxes)):    # Fixa uma caixa e compara com as outras
+    global list_boxes 
+    for i in range(len(list_boxes)):  
+        count += 1          #Comparando as caixas da lista
+        for j in range(len(list_boxes)):   # Fixa uma caixa e compara com as outras
+            count += 1    
             if i == j:          #Se a comparação for da caixa com ela mesma, pula a comparação
                 continue
             elif (list_boxes[i].get_bigger_side() < list_boxes[j].get_bigger_side() and
@@ -40,7 +43,9 @@ def write_txt():
     global list_boxes
     with open("Resultados\\grafo.txt", "w") as archive:     #Abrindo o arquivo de saida
         for box in list_boxes:          #Iterando sobre toda a lista
+            count += 1    
             for box_id in box.contained:    #Pegando da caixa as caixas maiores que ela
+                count += 1    
                 line = f"{box.get_name()} {box_id} \n"   #Criando a linha para escrevendo no txt
                 archive.write(line)         #Escrevendo no txt
 
@@ -55,6 +60,7 @@ def longest_path(d):
     # Inicialize uma vez para todos os vértices
     
     for box in list_boxes:
+        count += 1    
         if box.contain_IsEmpty():               #Pega todos vertices com grau de entrada igual a 0
             lp = LongestPathDAG(d, box.get_name())  
             lp.find_longest_path()      #Calcula o maior caminho de cada vertice
@@ -65,7 +71,9 @@ def calc_longest_path():
     
     # Agora calcule os caminhos para todos os pares
     for source_box in list_boxes:
+        count += 1    
         for target_box in list_boxes:
+            count += 1    
             if source_box.get_name() in longest_paths:
                 path = longest_paths[source_box.get_name()].path_to(target_box.get_name())
                 if path is not None:  # Adiciona apenas se o caminho for válido (não vazio)
@@ -79,6 +87,7 @@ def print_longest_path():
     max_length = 0          #Variavel usada para guardar o comprimento do maior caminho
     max_path_info = None    #Variavel usada para guardar as infos sobre o maior caminho
     for source, target, path, length in paths:
+        count += 1    
         if length > max_length: 
             max_length = length
             max_path_info = (source, target, path)
@@ -149,6 +158,7 @@ def main():
     print_longest_path()
     final_time = process_time()
     print(f"O tempo para rodar o {option} foi: {final_time - start_time}")
+    print(f"Contagem de op: {count}")
 
 
 if __name__ == "__main__":
